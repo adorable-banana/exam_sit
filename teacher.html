@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>老师 - 考试座位表系统</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="menu-btn" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+    </div>
+    
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>班级选择</h3>
+            <span class="close-btn" onclick="toggleMenu()">&times;</span>
+        </div>
+        <div class="sidebar-content">
+            <div class="grade-section">
+                <h4>初一</h4>
+                <button class="class-btn" data-grade="初一" data-class="信">信班</button>
+                <button class="class-btn" data-grade="初一" data-class="望">望班</button>
+                <button class="class-btn" data-grade="初一" data-class="爱">爱班</button>
+                <button class="class-btn" data-grade="初一" data-class="善">善班</button>
+                <button class="class-btn" data-grade="初一" data-class="正">正班</button>
+                <button class="class-btn" data-grade="初一" data-class="光">光班</button>
+            </div>
+            <div class="grade-section">
+                <h4>初二</h4>
+                <button class="class-btn" data-grade="初二" data-class="信">信班</button>
+                <button class="class-btn" data-grade="初二" data-class="望">望班</button>
+                <button class="class-btn" data-grade="初二" data-class="爱">爱班</button>
+                <button class="class-btn" data-grade="初二" data-class="善">善班</button>
+                <button class="class-btn" data-grade="初二" data-class="正">正班</button>
+                <button class="class-btn" data-grade="初二" data-class="光">光班</button>
+            </div>
+            <div class="grade-section">
+                <h4>初三</h4>
+                <button class="class-btn" data-grade="初三" data-class="信">信班</button>
+                <button class="class-btn" data-grade="初三" data-class="望">望班</button>
+                <button class="class-btn" data-grade="初三" data-class="爱">爱班</button>
+                <button class="class-btn" data-grade="初三" data-class="善">善班</button>
+                <button class="class-btn" data-grade="初三" data-class="正">正班</button>
+                <button class="class-btn" data-grade="初三" data-class="光">光班</button>
+            </div>
+            <div class="grade-section">
+                <h4>高一</h4>
+                <button class="class-btn" data-grade="高一" data-class="信">信班</button>
+                <button class="class-btn" data-grade="高一" data-class="望">望班</button>
+                <button class="class-btn" data-grade="高一" data-class="爱">爱班</button>
+                <button class="class-btn" data-grade="高一" data-class="善">善班</button>
+                <button class="class-btn" data-grade="高一" data-class="正">正班</button>
+                <button class="class-btn" data-grade="高一" data-class="光">光班</button>
+            </div>
+            <div class="grade-section">
+                <h4>高二</h4>
+                <button class="class-btn" data-grade="高二" data-class="信">信班</button>
+                <button class="class-btn" data-grade="高二" data-class="望">望班</button>
+                <button class="class-btn" data-grade="高二" data-class="爱">爱班</button>
+                <button class="class-btn" data-grade="高二" data-class="善">善班</button>
+                <button class="class-btn" data-grade="高二" data-class="正">正班</button>
+                <button class="class-btn" data-grade="高二" data-class="光">光班</button>
+            </div>
+            <div class="grade-section">
+                <h4>高三</h4>
+                <button class="class-btn" data-grade="高三" data-class="信">信班</button>
+                <button class="class-btn" data-grade="高三" data-class="望">望班</button>
+                <button class="class-btn" data-grade="高三" data-class="爱">爱班</button>
+                <button class="class-btn" data-grade="高三" data-class="善">善班</button>
+                <button class="class-btn" data-grade="高三" data-class="正">正班</button>
+                <button class="class-btn" data-grade="高三" data-class="光">光班</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <h1>老师考试座位表系统</h1>
+        <div id="class-display">
+            <div id="initial-message">请选取班别</div>
+            <div id="upload-container" style="display: none;">
+                <p>该班级暂无座位表数据，请上传Excel文件：</p>
+                <input type="file" id="file-upload" accept=".xlsx, .xls">
+                <button id="upload-btn">上传</button>
+            </div>
+            <div id="seating-chart-container" style="display: none;">
+                <h2 id="class-title"></h2>
+                <div id="seating-chart"></div>
+                <button id="save-btn">保存出席情况</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="data.js"></script>
+    <script src="teacher.js"></script>
+</body>
+</html> 
