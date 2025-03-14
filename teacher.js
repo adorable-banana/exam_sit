@@ -68,6 +68,8 @@ function renderSeatingChart(grade, className) {
     const classData = getClassData(grade, className);
     if (!classData || !classData.students) return;
     
+    console.log('渲染座位表:', classData); // 调试信息
+    
     // 创建42个座位
     for (let i = 0; i < 42; i++) {
         const student = i < classData.students.length ? classData.students[i] : null;
@@ -76,6 +78,8 @@ function renderSeatingChart(grade, className) {
         seatElement.className = 'seat';
         
         if (student) {
+            console.log(`学生 ${i+1}:`, student.name, student.status, student.id); // 调试信息
+            
             seatElement.innerHTML = `
                 <div class="seat-number">${i + 1}</div>
                 <div class="student-name">${student.name}</div>
@@ -93,7 +97,8 @@ function renderSeatingChart(grade, className) {
             // 添加点击事件切换出席状态
             seatElement.setAttribute('data-student-id', student.id);
             seatElement.addEventListener('click', function() {
-                toggleAttendance(this, student.id);
+                const clickedStudentId = parseInt(this.getAttribute('data-student-id'));
+                toggleAttendance(this, clickedStudentId);
             });
         } else {
             seatElement.innerHTML = `
@@ -109,18 +114,40 @@ function renderSeatingChart(grade, className) {
 
 // 切换出席状态
 function toggleAttendance(seatElement, studentId) {
-    // 移除所有状态类
-    seatElement.classList.remove('present', 'personal-leave', 'official-leave');
+    console.log('切换出席状态:', seatElement, studentId); // 调试信息
     
-    // 获取当前状态
-    let newStatus = 'absent';
-    if (seatElement.classList.contains('absent') || !seatElement.classList.contains('present')) {
-        seatElement.classList.add('present');
-        newStatus = 'present';
+    // 获取当前学生数据
+    const classData = getClassData(currentGrade, currentClass);
+    if (!classData || !classData.students) {
+        console.error('找不到班级数据');
+        return;
     }
     
-    // 更新数据
-    updateStudentStatus(currentGrade, currentClass, studentId, newStatus);
+    // 查找学生
+    const student = classData.students.find(s => s.id === studentId);
+    if (!student) {
+        console.error('找不到学生:', studentId);
+        return;
+    }
+    
+    console.log('当前状态:', student.status);
+    
+    // 切换状态
+    if (student.status === 'present') {
+        // 如果当前是在校状态，切换为缺席状态
+        student.status = 'absent';
+        seatElement.classList.remove('present');
+    } else {
+        // 如果当前是缺席状态或其他状态，切换为在校状态
+        student.status = 'present';
+        seatElement.classList.remove('personal-leave', 'official-leave');
+        seatElement.classList.add('present');
+    }
+    
+    // 保存数据
+    saveDataToLocalStorage();
+    
+    console.log('新状态:', student.status);
 }
 
 // 处理文件上传

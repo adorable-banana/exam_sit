@@ -63,6 +63,8 @@ function renderSeatingChart(grade, className) {
     const classData = getClassData(grade, className);
     if (!classData || !classData.students) return;
     
+    console.log('主任页面渲染座位表:', classData); // 调试信息
+    
     // 创建42个座位
     for (let i = 0; i < 42; i++) {
         const student = i < classData.students.length ? classData.students[i] : null;
@@ -71,17 +73,29 @@ function renderSeatingChart(grade, className) {
         seatElement.className = 'seat';
         
         if (student) {
+            console.log(`学生 ${i+1}:`, student.name, student.status, student.id); // 调试信息
+            
             // 设置座位状态
             if (student.status === 'present') {
                 seatElement.classList.add('present');
+                seatElement.innerHTML = `
+                    <div class="seat-number">${i + 1}</div>
+                    <div class="student-name">${student.name}</div>
+                `;
             } else if (student.status === 'personal-leave') {
                 seatElement.classList.add('personal-leave');
+                seatElement.innerHTML = `
+                    <div class="seat-number">${i + 1}</div>
+                    <div class="student-name">${student.name}</div>
+                `;
             } else if (student.status === 'official-leave') {
                 seatElement.classList.add('official-leave');
-            }
-            
-            // 为缺席学生添加请假按钮
-            if (student.status === 'absent') {
+                seatElement.innerHTML = `
+                    <div class="seat-number">${i + 1}</div>
+                    <div class="student-name">${student.name}</div>
+                `;
+            } else {
+                // 缺席状态，添加请假按钮
                 seatElement.innerHTML = `
                     <div class="seat-number">${i + 1}</div>
                     <div class="student-name">${student.name}</div>
@@ -100,11 +114,6 @@ function renderSeatingChart(grade, className) {
                         markLeave(studentId, leaveType);
                     });
                 });
-            } else {
-                seatElement.innerHTML = `
-                    <div class="seat-number">${i + 1}</div>
-                    <div class="student-name">${student.name}</div>
-                `;
             }
         } else {
             seatElement.innerHTML = `
@@ -120,12 +129,37 @@ function renderSeatingChart(grade, className) {
 
 // 标记请假
 function markLeave(studentId, leaveType) {
-    if (updateStudentStatus(currentGrade, currentClass, studentId, leaveType)) {
-        // 重新渲染座位表
-        renderSeatingChart(currentGrade, currentClass);
-        // 更新出席统计
-        updateAttendanceSummary(currentGrade, currentClass);
+    console.log('标记请假:', studentId, leaveType); // 调试信息
+    
+    // 获取当前学生数据
+    const classData = getClassData(currentGrade, currentClass);
+    if (!classData || !classData.students) {
+        console.error('找不到班级数据');
+        return false;
     }
+    
+    // 查找学生
+    const student = classData.students.find(s => s.id === studentId);
+    if (!student) {
+        console.error('找不到学生:', studentId);
+        return false;
+    }
+    
+    console.log('学生信息:', student);
+    
+    // 更新学生状态
+    student.status = leaveType;
+    
+    // 保存数据
+    saveDataToLocalStorage();
+    
+    // 重新渲染座位表
+    renderSeatingChart(currentGrade, currentClass);
+    
+    // 更新出席统计
+    updateAttendanceSummary(currentGrade, currentClass);
+    
+    return true;
 }
 
 // 更新出席统计

@@ -3,7 +3,7 @@ const classData = {
     // 数据结构示例:
     // "初一信": {
     //     students: [
-    //         { id: 1, name: "学生1", status: "absent" }, // absent, present, personal-leave, official-leave
+    //         { id: 1, name: "学生1", status: "present" }, // absent, present, personal-leave, official-leave
     //         ...
     //     ]
     // }
@@ -66,11 +66,20 @@ function createStudentsFromExcel(excelData) {
     for (let i = 0; i < excelData.length; i++) {
         if (excelData[i] && excelData[i].length >= 2) {
             students.push({
-                id: i + 1,
+                id: i + 1, // 确保ID是唯一的数字
                 name: excelData[i][1] || `学生${i + 1}`,
-                status: 'absent' // 默认为缺席
+                status: 'present' // 默认为在校（绿色）
             });
         }
+    }
+    
+    // 确保至少有42个学生
+    while (students.length < 42) {
+        students.push({
+            id: students.length + 1,
+            name: `学生${students.length + 1}`,
+            status: 'present'
+        });
     }
     
     return students;
